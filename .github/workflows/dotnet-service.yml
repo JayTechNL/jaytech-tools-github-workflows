@@ -24,7 +24,7 @@ on:
         description: The region in AWS to push to
         required: true
       aws-access-key-id:
-        description:  The AWS Access Key ID
+        description: The AWS Access Key ID
         required: true
       aws-secret-access-key:
         description: The AWS Secret Access Key
@@ -134,7 +134,6 @@ jobs:
           repository: CROW-NL/asfalt-impuls-tool-environment
           token: ${{secrets.pat-github}}
           path: workflow/gitops
-          
       - name: Set GitOps version
         uses: fjogeleit/yaml-update-action@main
         with:
@@ -150,7 +149,7 @@ jobs:
           API_TOKEN_GITHUB: ${{ secrets.pat-github }}
         with:
           source-directory: workflow/gitops
-          destination-github-username: ${{ github.event.repository_owner }}
+          destination-github-username: JayTechNL
           destination-repository-name: ${{ github.event.repository.name }}
           commit-message: Updated ${{ github.event.repository.name }} version to ${{inputs.software-version}}
           target-branch: development
