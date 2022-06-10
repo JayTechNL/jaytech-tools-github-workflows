@@ -5,6 +5,11 @@ on:
         description: Repository name; format = [organization]/[repository-name]
         required: true
         type: string
+      solution-location:
+        description: Additional folders to get to solution file location
+        required: false
+        default: Source/
+        type: string
     secrets:
       pat_github:
         description: GitHub PAT
@@ -39,5 +44,5 @@ jobs:
       - name: .NET build
         shell: bash
         run: |
-          cd repository
+          cd repository/${{inputs.solution-location}}
           dotnet build --configuration Release
