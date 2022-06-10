@@ -21,7 +21,8 @@ jobs:
           repository: ${{inputs.repository}}
           token: ${{ secrets.pat_github }}
           path: repository
-      - uses: actions/upload-artifact@v3
+      - name: Upload prepared repository
+        uses: actions/upload-artifact@v3
         with:
           name: repository
           path: repository
@@ -30,7 +31,13 @@ jobs:
     name: Build .NET
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v3
+      - name: Download prepared repository
+        uses: actions/download-artifact@v3
         with:
           name: repository
           path: repository
+      - name: .NET build
+        shell: bash
+        run: |
+          cd repository
+          dotnet build --configuration Release
