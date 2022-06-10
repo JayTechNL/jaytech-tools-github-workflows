@@ -15,15 +15,13 @@ on:
         description: Replacement placeholders separated by a semicolon (;)
         required: false
         default: ""
-      replacements-out:
-        type: string
-        description: Replacement values separated by a semicolon (;)
-        required: false
-        default: ""
     secrets:
       pat-github:
         description: GitHub PAT
         required: true
+      replacements-out:
+        description: Replacement values separated by a semicolon (;)
+        required: false
 jobs:
   preparations:
     name: Preparations
@@ -46,7 +44,7 @@ jobs:
         uses: ./workflow/actions/jta-replacements
         with:
           replacements-in: ${{inputs.replacements-in}}
-          replacements-out: ${{inputs.replacements-out}}
+          replacements-out: ${{secrets.replacements-out}}
       - name: Upload prepared repository
         uses: actions/upload-artifact@v3
         with:
