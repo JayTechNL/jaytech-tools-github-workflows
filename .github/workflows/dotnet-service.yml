@@ -15,15 +15,13 @@ on:
         description: Replacement placeholders separated by a semicolon (;)
         required: false
         default: ""
-      replacements-out:
-        type: string
-        description: Replacement values separated by a semicolon (;)
-        required: false
-        default: ""
     secrets:
-      pat_github:
+      pat-github:
         description: GitHub PAT
         required: true
+      replacements-out:
+        description: Replacement values separated by a semicolon (;)
+        required: false
 jobs:
   preparations:
     name: Preparations
@@ -33,14 +31,14 @@ jobs:
         uses: actions/checkout@v3
         with:
           repository: ${{inputs.repository}}
-          token: ${{ secrets.pat_github }}
+          token: ${{ secrets.pat-github }}
           path: workflow/repository
       - name: Checkout JayTech actions
         uses: actions/checkout@v3
         with:
           ref: "v1.4.0"
           repository: JayTechNL/jaytech-actions
-          token: ${{ secrets.pat_github }}
+          token: ${{ secrets.pat-github }}
           path: workflow/actions
       - name: Replace placeholders
         uses: ./workflow/actions/jta-replacements
