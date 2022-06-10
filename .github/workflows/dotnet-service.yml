@@ -62,6 +62,16 @@ jobs:
           path: workflow
       - name: .NET build
         shell: bash
-        run: |
-          cd workflow/repository/${{inputs.solution-location}}
-          dotnet build --configuration Release
+        run: dotnet build workflow/repository/${{inputs.solution-location}} --configuration Release
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download prepared repository
+        uses: actions/download-artifact@v3
+        with:
+          name: workflow
+          path: workflow
+      - name: Test .NET
+        shell: bash
+        run: dotnet test workflow/repository/${{inputs.solution-location}} --configuration Release
