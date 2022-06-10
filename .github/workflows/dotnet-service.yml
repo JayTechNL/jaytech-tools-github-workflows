@@ -44,7 +44,7 @@ jobs:
         uses: ./workflow/actions/jta-replacements
         with:
           replacements-in: ${{inputs.replacements-in}}
-          replacements-out: ${{inputs.replacements-out}}
+          replacements-out: ${{secrets.replacements-out}}
       - name: Upload prepared repository
         uses: actions/upload-artifact@v3
         with:
