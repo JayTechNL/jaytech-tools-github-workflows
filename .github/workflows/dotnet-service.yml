@@ -10,11 +10,20 @@ on:
         required: false
         default: Source/
         type: string
+      replacements-in:
+        type: string
+        description: Replacement placeholders separated by a semicolon (;)
+        required: false
+        default: ""
+      replacements-out:
+        type: string
+        description: Replacement values separated by a semicolon (;)
+        required: false
+        default: ""
     secrets:
       pat_github:
         description: GitHub PAT
         required: true
-
 jobs:
   preparations:
     name: Preparations
@@ -25,12 +34,24 @@ jobs:
         with:
           repository: ${{inputs.repository}}
           token: ${{ secrets.pat_github }}
-          path: repository
+          path: workflow/repository
+      - name: Checkout JayTech actions
+        uses: actions/checkout@v3
+        with:
+          ref: "v1.4.0"
+          repository: JayTechNL/jaytech-actions
+          token: ${{ secrets.pat_github }}
+          path: workflow/actions
+      - name: Replace placeholders
+        uses: workflow/actions/jta-replacements
+        with:
+          replacements-in: ${{inputs.replacements-in}}
+          replacements-out: ${{inputs.replacements-out}}
       - name: Upload prepared repository
         uses: actions/upload-artifact@v3
         with:
-          name: repository
-          path: repository
+          name: workflow
+          path: workflow
   build:
     needs: preparations
     name: Build .NET
@@ -39,10 +60,10 @@ jobs:
       - name: Download prepared repository
         uses: actions/download-artifact@v3
         with:
-          name: repository
-          path: repository
+          name: workflow
+          path: workflow
       - name: .NET build
         shell: bash
         run: |
-          cd repository/${{inputs.solution-location}}
+          cd workflow/repository/${{inputs.solution-location}}
           dotnet build --configuration Release
