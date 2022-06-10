@@ -137,7 +137,7 @@ jobs:
       - name: Set GitOps version
         uses: fjogeleit/yaml-update-action@main
         with:
-          valueFile: "workflow/gitops/version.yml"
+          valueFile: "./workflow/gitops/version.yml"
           propertyPath: "version.api"
           value: ${{inputs.software-version}}
           commitChange: false
