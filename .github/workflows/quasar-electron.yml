@@ -1,0 +1,18 @@
+on:
+  workflow_call:
+    inputs:
+      username:
+        required: true
+        type: string
+    secrets:
+      envPAT:
+        required: true
+
+jobs:
+  preparations:
+    name: Test job
+    runs-on: ubuntu-latest
+    steps:
+      - name: Test step
+        shell: bash
+        run: "echo LOL"
