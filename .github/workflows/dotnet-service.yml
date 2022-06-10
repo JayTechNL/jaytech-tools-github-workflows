@@ -21,19 +21,16 @@ jobs:
           repository: ${{inputs.repository}}
           token: ${{ secrets.pat_github }}
           path: repository
-      - name: Cache repository
-        id: cache-repository
-        uses: actions/cache@v3
+      - uses: actions/upload-artifact@v3
         with:
+          name: repository
           path: repository
-          key: ${{ runner.os }}-cache-repository
   build:
     needs: preparations
     name: Build .NET
     runs-on: ubuntu-latest
     steps:
-      - name: Build .NET
-        run: |
-          echo ${{env.cache-repository}}
-          ls -R -A
-          cd repository
+      - uses: actions/download-artifact@v3
+        with:
+          name: repository
+          path: repository
