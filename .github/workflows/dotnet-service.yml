@@ -106,7 +106,7 @@ jobs:
           test-project: JayTech.Services.JayTech.Tests.Unit
   continuous-delivery:
     name: Continuous Delivery
-    #needs: test
+    needs: preparations #test
     runs-on: ubuntu-latest
     steps:
       - name: Download prepared repository
