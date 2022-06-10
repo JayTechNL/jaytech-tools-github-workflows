@@ -36,7 +36,7 @@ jobs:
       - name: Checkout JayTech actions
         uses: actions/checkout@v3
         with:
-          ref: "v1.4.0"
+          ref: "v2.0.0"
           repository: JayTechNL/jaytech-actions
           token: ${{ secrets.pat-github }}
           path: workflow/actions
@@ -64,6 +64,7 @@ jobs:
         shell: bash
         run: dotnet build workflow/repository/${{inputs.solution-location}} --configuration Release
   test:
+    name: Test .NET
     needs: build
     runs-on: ubuntu-latest
     steps:
@@ -75,3 +76,18 @@ jobs:
       - name: Test .NET
         shell: bash
         run: dotnet test workflow/repository/${{inputs.solution-location}} --configuration Release
+  test-optional:
+    name: Optional Test Actions
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download prepared repository
+        uses: actions/download-artifact@v3
+        with:
+          name: workflow
+          path: workflow
+      - name: Stryker Solution
+        uses: ./workflow/actions/jta-stryker-solution
+        with:
+          projects: JayTech.Services.JayTech.Api
+          test-project: JayTech.Services.JayTech.Tests.Unit
