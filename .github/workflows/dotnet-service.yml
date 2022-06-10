@@ -22,6 +22,10 @@ on:
       replacements-out:
         description: Replacement values separated by a semicolon (;)
         required: false
+
+env: 
+  replacements-out: ${{secrets.replacements-out}}
+
 jobs:
   preparations:
     name: Preparations
@@ -44,7 +48,7 @@ jobs:
         uses: ./workflow/actions/jta-replacements
         with:
           replacements-in: ${{inputs.replacements-in}}
-          replacements-out: ${{secrets.replacements-out}}
+          replacements-out: ${{env.replacements-out}}
       - name: Upload prepared repository
         uses: actions/upload-artifact@v3
         with:
