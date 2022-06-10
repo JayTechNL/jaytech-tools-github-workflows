@@ -28,6 +28,7 @@ jobs:
           path: repository
           key: cache-repository
   build:
+    needs: preparations
     name: Build .NET
     runs-on: ubuntu-latest
     steps:
