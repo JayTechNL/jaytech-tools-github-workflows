@@ -21,3 +21,10 @@ jobs:
           repository: ${{inputs.repository}}
           token: ${{ secrets.pat_github }} 
           path: repository
+      - name: Cache repository
+        id: cache-repository
+        uses: actions/cache@v3
+        with:
+          path: repository
+          key: cache-repository
+  
