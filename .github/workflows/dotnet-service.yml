@@ -142,9 +142,6 @@ jobs:
           value: ${{inputs.software-version}}
           commitChange: false
           updateFile: true
-      - name: debug
-        run: echo ${{ github.event.repository_owner }}
-        shell: bash
       - name: Push to GitOps
         id: push_directory
         uses: cpina/github-action-push-to-another-repository@v1.4.2
@@ -152,7 +149,7 @@ jobs:
           API_TOKEN_GITHUB: ${{ secrets.pat-github }}
         with:
           source-directory: workflow/gitops
-          destination-github-username: ${{ github.event.repository_owner }}
+          destination-github-username: JayTechNL
           destination-repository-name: ${{ github.event.repository.name }}-gitops
           commit-message: Updated ${{ github.event.repository.name }} version to ${{inputs.software-version}}
           target-branch: development
