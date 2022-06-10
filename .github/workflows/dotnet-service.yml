@@ -1,7 +1,8 @@
 on:
   workflow_call:
     inputs:
-      username:
+      repository:
+        description: Repository name; format = [organization]/[repository-name]
         required: true
         type: string
     secrets:
@@ -10,9 +11,12 @@ on:
 
 jobs:
   preparations:
-    name: Test job
+    name: Prepare repository
     runs-on: ubuntu-latest
     steps:
-      - name: Test step
-        shell: bash
-        run: "echo LOL"
+      - name: Checkout private tools
+        uses: actions/checkout@v3
+        with:
+          repository: my-org/my-private-tools
+          token: ${{ secrets.GH_PAT }} # `GH_PAT` is a secret that contains your PAT
+          path: my-tools
