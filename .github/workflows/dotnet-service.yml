@@ -122,3 +122,35 @@ jobs:
           aws-access-key-id: ${{secrets.aws-access-key-id}}
           aws-secret-access-key: ${{secrets.aws-secret-access-key}}
           aws-region: ${{secrets.aws-region}}
+  sync-gitops:
+    name: Sync GitOps
+    needs: continuous-delivery
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout GitOps
+        uses: actions/checkout@v3
+        with:
+          ref: "development"
+          repository: CROW-NL/asfalt-impuls-tool-environment
+          token: ${{secrets.pat-github}}
+          path: workflow/gitops
+          
+      - name: Set GitOps version
+        uses: fjogeleit/yaml-update-action@main
+        with:
+          valueFile: "workflow/gitops/version.yml"
+          propertyPath: "version.api"
+          value: ${{inputs.software-version}}
+          commitChange: false
+          updateFile: true
+      - name: Push to GitOps
+        id: push_directory
+        uses: cpina/github-action-push-to-another-repository@v1.4.2
+        env:
+          API_TOKEN_GITHUB: ${{ secrets.pat-github }}
+        with:
+          source-directory: workflow/gitops
+          destination-github-username: ${{ github.event.repository.owner }}
+          destination-repository-name: ${{ github.event.repository.name }}
+          commit-message: Updated ${{ github.event.repository.name }} version to ${{inputs.software-version}}
+          target-branch: development
