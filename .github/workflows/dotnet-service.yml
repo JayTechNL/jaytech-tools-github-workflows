@@ -6,7 +6,8 @@ on:
         required: true
         type: string
     secrets:
-      envPAT:
+      pat_github:
+        description: GitHub PAT
         required: true
 
 jobs:
@@ -14,9 +15,9 @@ jobs:
     name: Prepare repository
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout private tools
+      - name: Checkout repository
         uses: actions/checkout@v3
         with:
-          repository: my-org/my-private-tools
-          token: ${{ secrets.GH_PAT }} # `GH_PAT` is a secret that contains your PAT
-          path: my-tools
+          repository: ${{inputs.repository}}
+          token: ${{ secrets.pat_github }} 
+          path: repository
