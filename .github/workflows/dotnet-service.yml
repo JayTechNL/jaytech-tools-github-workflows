@@ -77,7 +77,7 @@ jobs:
         shell: bash
         run: dotnet test workflow/repository/${{inputs.solution-location}} --configuration Release
   test-optional:
-    name: Optional Test Actions
+    name: Test .NET (optional)
     needs: build
     runs-on: ubuntu-latest
     steps:
