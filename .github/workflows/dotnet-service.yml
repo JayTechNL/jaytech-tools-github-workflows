@@ -150,7 +150,7 @@ jobs:
           API_TOKEN_GITHUB: ${{ secrets.pat-github }}
         with:
           source-directory: workflow/gitops
-          destination-github-username: ${{ github.event.repository.owner }}
+          destination-github-username: ${{ github.event.repository.owner.login }}
           destination-repository-name: ${{ github.event.repository.name }}
           commit-message: Updated ${{ github.event.repository.name }} version to ${{inputs.software-version}}
           target-branch: development
