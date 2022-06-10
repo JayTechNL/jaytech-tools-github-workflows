@@ -43,7 +43,7 @@ jobs:
           token: ${{ secrets.pat_github }}
           path: workflow/actions
       - name: Replace placeholders
-        uses: workflow/actions/jta-replacements
+        uses: ./workflow/actions/jta-replacements
         with:
           replacements-in: ${{inputs.replacements-in}}
           replacements-out: ${{inputs.replacements-out}}
