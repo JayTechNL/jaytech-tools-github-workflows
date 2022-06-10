@@ -142,6 +142,9 @@ jobs:
           value: ${{inputs.software-version}}
           commitChange: false
           updateFile: true
+      - name: debug
+        run: echo ${{ github.event.repository_owner }}
+        shell: bash
       - name: Push to GitOps
         id: push_directory
         uses: cpina/github-action-push-to-another-repository@v1.4.2
