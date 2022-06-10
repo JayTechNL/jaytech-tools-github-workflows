@@ -118,7 +118,7 @@ jobs:
         uses: ./workflow/actions/jta-docker-push-aws
         with:
           container-name: ${{ github.event.repository.name }}
-          software-version: ${{env.software-version}}
+          software-version: ${{inputs.software-version}}
           aws-access-key-id: ${{secrets.aws-access-key-id}}
           aws-secret-access-key: ${{secrets.aws-secret-access-key}}
           aws-region: ${{secrets.aws-region}}
