@@ -15,7 +15,20 @@ on:
         description: Replacement placeholders separated by a semicolon (;)
         required: false
         default: ""
+      software-version:
+        type: string
+        description: The semantic version of the software
+        required: true
     secrets:
+      aws-region:
+        description: The region in AWS to push to
+        required: true
+      aws-access-key-id:
+        description:  The AWS Access Key ID
+        required: true
+      aws-secret-access-key:
+        description: The AWS Secret Access Key
+        required: true
       pat-github:
         description: GitHub PAT
         required: true
@@ -91,3 +104,16 @@ jobs:
         with:
           projects: JayTech.Services.JayTech.Api
           test-project: JayTech.Services.JayTech.Tests.Unit
+  continuous-delivery:
+    name: Continuous Delivery
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Push Docker Image To AWS
+        uses: ./workflow/actions/jta-docker-push-aws
+        with:
+          container-name: ${{ github.event.repository.name }}
+          software-version: ${{env.software-version}}
+          aws-access-key-id: ${{secrets.aws-access-key-id}}
+          aws-secret-access-key: ${{secrets.aws-secret-access-key}}
+          aws-region: ${{secrets.aws-region}}
