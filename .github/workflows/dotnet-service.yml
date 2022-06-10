@@ -40,6 +40,9 @@ jobs:
     name: Preparations
     runs-on: ubuntu-latest
     steps:
+      - name: Debug
+        shell: bash
+        run: echo ${{ github.repository_owner }}
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
