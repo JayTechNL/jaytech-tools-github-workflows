@@ -109,6 +109,11 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
+      - name: Download prepared repository
+        uses: actions/download-artifact@v3
+        with:
+          name: workflow
+          path: workflow
       - name: Push Docker Image To AWS
         uses: ./workflow/actions/jta-docker-push-aws
         with:
