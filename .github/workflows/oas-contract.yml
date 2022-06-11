@@ -82,7 +82,7 @@ jobs:
         # Remove constructor and change Decimal to decimal to support the package for .NET + MediatR
         run: |
           shopt -s globstar
-          for f in ./wd/actions/jta-swagger-codegen/output/src/${{env.PACKAGE_NAME}}/Model/*.cs ; do
+          for f in ./workflow/actions/jta-swagger-codegen/output/src/${{env.PACKAGE_NAME}}/Model/*.cs ; do
             sed -i "s~Decimal?~decimal?~g" $f
             perl -pi -0777pe 's~\/\/\/ Initializes((.|\n)*?)*?\}((.|\n)*?)*?<summary>~~g' $f
           done
