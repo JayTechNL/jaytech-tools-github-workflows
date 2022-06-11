@@ -5,6 +5,10 @@ on:
         type: string
         description: The version of the contract to use for NuGet
         required: true
+      package-name:
+        type: string
+        description: The name of the package for NuGet
+        required: true
       dotnet-version:
         type: string
         description: The version .NET to use for NuGet
@@ -15,10 +19,6 @@ on:
         description: The location to the OAS file
         required: false
         default: src/oas.yaml
-      package-name:
-        type: string
-        description: The name of the package for NuGet
-        required: true
     secrets:
       pat-github:
         description: GitHub PAT
@@ -46,7 +46,7 @@ jobs:
       - name: Checkout JayTech actions
         uses: actions/checkout@v3
         with:
-          ref: "v2.0.0"
+          ref: "v2.1.0"
           repository: JayTechNL/jaytech-actions
           token: ${{ secrets.pat-github }}
           path: workflow/actions
@@ -78,9 +78,9 @@ jobs:
           target-framework: v5.0
           optional-emit-default-values: true
           validatable: false
-      - name: Post Build modifications        
+      - name: Post Build modifications
         # Remove constructor and change Decimal to decimal to support the package for .NET + MediatR
-        run: |        
+        run: |
           shopt -s globstar
           for f in ./wd/actions/jta-swagger-codegen/output/src/${{env.PACKAGE_NAME}}/Model/*.cs ; do
             sed -i "s~Decimal?~decimal?~g" $f
