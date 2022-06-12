@@ -104,7 +104,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: contract-package
-          path: workflow/actions/jta-nuget-push-azure/contract-package
+          path: ./workflow/actions/jta-nuget-push-azure/contract-package
       - name: jta-nuget-push-azure
         uses: ./workflow/actions/jta-nuget-push-azure
         with:
