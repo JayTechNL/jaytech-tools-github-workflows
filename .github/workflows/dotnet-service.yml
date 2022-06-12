@@ -63,7 +63,7 @@ jobs:
           token: ${{ secrets.pat-github }}
           path: workflow/actions
       - name: Replace placeholders
-        uses: ./workflow/actions/jta-replacements
+        uses: ./workflow/actions/replace-placeholders
         with:
           replacements-in: ${{inputs.replacements-in}}
           replacements-out: ${{secrets.replacements-out}}
@@ -82,9 +82,10 @@ jobs:
         with:
           name: workflow
           path: workflow
-      - name: .NET build
-        shell: bash
-        run: dotnet build workflow/repository/${{inputs.solution-location}} --configuration Release
+      - name: .NET Build
+        uses: ./workflow/actions/dotnet-build
+        with:
+          solution-path: ${{inputs.solution-location}}
   test:
     name: Test .NET
     needs: build
@@ -95,9 +96,10 @@ jobs:
         with:
           name: workflow
           path: workflow
-      - name: Test .NET
-        shell: bash
-        run: dotnet test workflow/repository/${{inputs.solution-location}} --configuration Release
+      - name: .NET Test
+        uses: ./workflow/actions/dotnet-test
+        with:
+          solution-path: ${{inputs.solution-location}}
   test-optional:
     name: Test .NET (optional)
     needs: build
@@ -109,7 +111,7 @@ jobs:
           name: workflow
           path: workflow
       - name: Stryker Solution
-        uses: ./workflow/actions/jta-stryker-solution
+        uses: ./workflow/actions/stryker-solution
         with:
           projects: JayTech.Services.JayTech.Api
           test-project: JayTech.Services.JayTech.Tests.Unit
@@ -124,7 +126,7 @@ jobs:
           name: workflow
           path: workflow
       - name: Push Docker Image To AWS
-        uses: ./workflow/actions/jta-docker-push-aws
+        uses: ./workflow/actions/docker-push-aws
         with:
           container-name: ${{ github.event.repository.name }}
           software-version: ${{inputs.software-version}}
