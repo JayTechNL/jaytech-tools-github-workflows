@@ -78,6 +78,7 @@ jobs:
           target-framework: v5.0
           optional-emit-default-values: true
           validatable: false
+          model-only: true
       - uses: actions/upload-artifact@v3
         with:
           name: contract-package
