@@ -104,13 +104,13 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: contract-package
-          path: contract-package
+          path: workflow/actions/jta-nuget-push-azure/contract-package
       - name: jta-nuget-push-azure
         uses: ./workflow/actions/jta-nuget-push-azure
         with:
           software-version: ${{inputs.contract-version}}
           dotnet-version: ${{inputs.dotnet-version}}
-          project-folder: ./contract-package
+          project-folder: contract-package
           azure-api-key: ${{secrets.azure-api-key}}
           azure-source: ${{secrets.azure-source}}
           azure-feed: ${{secrets.azure-feed}}
