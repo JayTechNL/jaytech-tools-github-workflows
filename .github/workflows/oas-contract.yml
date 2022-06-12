@@ -70,7 +70,7 @@ jobs:
         with:
           input-file: ${{inputs.oas-location}}
           language: csharp
-          package-name: ${{env.package-name}}
+          package-name: ${{inputs.package-name}}
           package-version: ${{inputs.contract-version}}
           return-i-collection: true
           model-package: Model
@@ -78,14 +78,6 @@ jobs:
           target-framework: v5.0
           optional-emit-default-values: true
           validatable: false
-      - name: Post Build modifications
-        # Remove constructor and change Decimal to decimal to support the package for .NET + MediatR
-        run: |
-          shopt -s globstar
-          for f in ./workflow/actions/jta-swagger-codegen/output/src/${{env.PACKAGE_NAME}}/Model/*.cs ; do
-            sed -i "s~Decimal?~decimal?~g" $f
-            perl -pi -0777pe 's~\/\/\/ Initializes((.|\n)*?)*?\}((.|\n)*?)*?<summary>~~g' $f
-          done
       - uses: actions/upload-artifact@v3
         with:
           name: contract-package
