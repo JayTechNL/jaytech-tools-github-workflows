@@ -46,8 +46,8 @@ jobs:
       - name: Checkout JayTech actions
         uses: actions/checkout@v3
         with:
-          ref: "v2.1.0"
-          repository: JayTechNL/jaytech-actions
+          ref: master
+          repository: JayTechNL/jaytech-tools-github-actions
           token: ${{ secrets.pat-github }}
           path: workflow/actions
       - name: Upload prepared repository
@@ -65,24 +65,16 @@ jobs:
         with:
           name: workflow
           path: workflow
-      - name: jta-swagger-codegen
-        uses: ./workflow/actions/jta-swagger-codegen
+      - name: Build OAS Contract
+        uses: ./workflow/actions/dotnet-build-contract
         with:
-          input-file: ${{inputs.oas-location}}
-          language: csharp
+          file-path: ${{inputs.oas-location}}
           package-name: ${{inputs.package-name}}
           package-version: ${{inputs.contract-version}}
-          return-i-collection: true
-          model-package: Model
-          net-core-project-file: true
-          target-framework: v5.0
-          optional-emit-default-values: true
-          validatable: false
-          model-only: true
       - uses: actions/upload-artifact@v3
         with:
           name: contract-package
-          path: ./workflow/actions/jta-swagger-codegen/output/src
+          path: ./workflow/actions/dotnet-build-contract/output/src/
   continuous-delivery:
     name: Continuous Delivery
     needs: build
@@ -97,7 +89,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: contract-package
-          path: ./workflow/actions/jta-nuget-push-azure/contract-package
+          path: ./workflow/actions/nuget-push-azure/contract-package
       - name: jta-nuget-push-azure
         uses: ./workflow/actions/jta-nuget-push-azure
         with:
