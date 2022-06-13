@@ -69,11 +69,11 @@ jobs:
         uses: ./workflow/actions/quasar-build-android
         with:
           folder: ${{inputs.source-folder}}
-      - name: Download prepared repository
+      - name: Upload built repository
         uses: actions/upload-artifact@v3
         with:
-          name: workflow
-          path: workflow
+          name: output
+          path: dist
   continuous-delivery:
     needs: build
     name: Continuous Delivery
@@ -84,6 +84,11 @@ jobs:
         with:
           name: workflow
           path: workflow
+      - name: Download built output
+        uses: actions/download-artifact@v3
+        with:
+          name: output
+          path: workflow/dist
       - name: Quasar Publish Android
         uses: ./workflow/actions/quasar-publish-android
         with:
