@@ -1,6 +1,11 @@
 on:
   workflow_call:
     inputs:
+      app-id:
+        type: string
+        description: Application ID (for Play Store)
+        required: false
+        default: ""
       replacements-in:
         type: string
         description: Replacement placeholders separated by a semicolon (;)
@@ -14,6 +19,9 @@ on:
     secrets:
       pat-github:
         description: GitHub PAT
+        required: true
+      play-store-json:
+        description: Google Play Store JSON
         required: true
       replacements-out:
         description: Replacement values separated by a semicolon (;)
@@ -47,7 +55,7 @@ jobs:
         with:
           name: workflow
           path: workflow
-  build-web:
+  build:
     needs: preparations
     name: Build Quasar Android
     runs-on: ubuntu-latest
@@ -61,4 +69,13 @@ jobs:
         uses: ./workflow/actions/quasar-build-android
         with:
           folder: ${{inputs.source-folder}}
-  
+  continuous-delivery:
+    needs: build
+    name: Continous Delivery
+    runs-on: ubuntu-latest
+    steps:
+      - name: Quasar Publish Android
+        uses: ./wd/actions/quasar-publish-android
+        with:
+          app-id: ${{inputs.app-id}}
+          play-store-json: ${{secrets.play-store-json}}
