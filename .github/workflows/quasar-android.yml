@@ -12,6 +12,9 @@ on:
         required: false
         default: "./workflow/repository"
     secrets:
+      pat-github:
+        description: GitHub PAT
+        required: true
       replacements-out:
         description: Replacement values separated by a semicolon (;)
         required: false
