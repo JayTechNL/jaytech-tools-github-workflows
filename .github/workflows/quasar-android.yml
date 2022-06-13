@@ -73,7 +73,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: output
-          path: dist
+          path: ./workflow/repository/dist
   continuous-delivery:
     needs: build
     name: Continuous Delivery
