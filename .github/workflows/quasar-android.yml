@@ -33,7 +33,7 @@ jobs:
       - name: Checkout JayTech actions
         uses: actions/checkout@v3
         with:
-          ref: master1
+          ref: master
           repository: JayTechNL/jaytech-tools-github-actions
           token: ${{ secrets.pat-github }}
           path: workflow/actions
