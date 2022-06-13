@@ -1,18 +1,61 @@
 on:
   workflow_call:
     inputs:
-      username:
-        required: true
+      replacements-in:
         type: string
+        description: Replacement placeholders separated by a semicolon (;)
+        required: false
+        default: ""
+      source-folder:
+        type: string
+        description: Root folder of the source code
+        required: false
+        default: "./workflow/repository"
     secrets:
-      envPAT:
-        required: true
+      replacements-out:
+        description: Replacement values separated by a semicolon (;)
+        required: false
 
 jobs:
   preparations:
-    name: Test job
+    name: Preparations
     runs-on: ubuntu-latest
     steps:
-      - name: Test step
-        shell: bash
-        run: "echo LOL"
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          repository: ${{inputs.repository}}
+          token: ${{ secrets.pat-github }}
+          path: workflow/repository
+      - name: Checkout JayTech actions
+        uses: actions/checkout@v3
+        with:
+          ref: master1
+          repository: JayTechNL/jaytech-tools-github-actions
+          token: ${{ secrets.pat-github }}
+          path: workflow/actions
+      - name: Replace placeholders
+        uses: ./workflow/actions/replace-placeholders
+        with:
+          replacements-in: ${{inputs.replacements-in}}
+          replacements-out: ${{secrets.replacements-out}}
+      - name: Upload prepared repository
+        uses: actions/upload-artifact@v3
+        with:
+          name: workflow
+          path: workflow
+  build-web:
+    needs: preparations
+    name: Build Quasar Android
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download prepared repository
+        uses: actions/download-artifact@v3
+        with:
+          name: workflow
+          path: workflow
+      - name: Quasar Build Android
+        uses: ./workflow/actions/quasar-build-android
+        with:
+          folder: ${{inputs.source-folder}}
+  
