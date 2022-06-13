@@ -71,7 +71,7 @@ jobs:
           folder: ${{inputs.source-folder}}
   continuous-delivery:
     needs: build
-    name: Continous Delivery
+    name: Continuous Delivery
     runs-on: ubuntu-latest
     steps:
       - name: Quasar Publish Android
