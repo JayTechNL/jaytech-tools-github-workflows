@@ -75,7 +75,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Quasar Publish Android
-        uses: ./wd/actions/quasar-publish-android
+        uses: ./workflow/actions/quasar-publish-android
         with:
           app-id: ${{inputs.app-id}}
           play-store-json: ${{secrets.play-store-json}}
