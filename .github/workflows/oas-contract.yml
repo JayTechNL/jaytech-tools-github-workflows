@@ -65,6 +65,8 @@ jobs:
         with:
           name: workflow
           path: workflow
+      - name: Set contract version
+        run: sed -i "s/{{OAS_VERSION}}/${{inputs.contract-version}}/g" ${{inputs.oas-location}}
       - name: Build OAS Contract
         uses: ./workflow/actions/dotnet-build-contract
         with:
