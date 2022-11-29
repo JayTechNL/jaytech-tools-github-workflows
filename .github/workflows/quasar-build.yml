@@ -92,7 +92,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.pat-github }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./quasar-web.tar.gz
+          asset_path: ./output/web/quasar-web.tar.gz
           asset_name: quasar-web.tar.gz
           asset_content_type: application/gzip
     
