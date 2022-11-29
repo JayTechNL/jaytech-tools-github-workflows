@@ -1,0 +1,65 @@
+on:
+  workflow_call:
+    inputs:
+      app-id:
+        type: string
+        description: Application ID (for Play Store)
+        required: false
+        default: ""
+      replacements-in:
+        type: string
+        description: Replacement placeholders separated by a semicolon (;)
+        required: false
+        default: ""
+      source-folder:
+        type: string
+        description: Root folder of the source code
+        required: false
+        default: "./workflow/repository"
+      build-android:
+        type: boolean
+        description: Run Quasar build for android?
+        required: false
+        default: false
+      build-electron:
+        type: boolean
+        description: Run Quasar build for electron?
+        required: false
+        default: false
+      build-ios:
+        type: boolean
+        description: Run Quasar build for ios?
+        required: false
+        default: false
+      build-web:
+        type: boolean
+        description: Run Quasar build for web?
+        required: false
+        default: false      
+    secrets:
+      pat-github:
+        description: GitHub PAT
+        required: true
+      play-store-json:
+        description: Google Play Store JSON
+        required: true
+      replacements-out:
+        description: Replacement values separated by a semicolon (;)
+        required: false
+
+
+    jobs:
+      quasar-build-android:
+        if: ${{inputs.build-android}} == 'true'
+        uses: JayTechNL/jaytech-tools-github-workflows/.github/workflows/quasar-android.yml@master
+        with:
+          app-id: nl.jaytech.app
+        secrets:
+          play-store-json: ${{ secrets.PLAY_STORE_JSON }}
+          pat-github: ${{ secrets.PAT_GITHUB }}
+     
+      quasar-web:
+        if: ${{inputs.build-web}} == 'true'
+        uses: JayTechNL/jaytech-tools-github-workflows/.github/workflows/quasar-web.yml@master
+        secrets:
+          pat-github: ${{ secrets.PAT_GITHUB }}
