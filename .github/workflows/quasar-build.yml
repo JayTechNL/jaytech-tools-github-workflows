@@ -47,19 +47,18 @@ on:
         description: Replacement values separated by a semicolon (;)
         required: false
 
+jobs:
+  quasar-build-android:
+    if: ${{inputs.build-android}} == 'true'
+    uses: JayTechNL/jaytech-tools-github-workflows/.github/workflows/quasar-android.yml@master
+    with:
+      app-id: nl.jaytech.app
+    secrets:
+      play-store-json: ${{ secrets.PLAY_STORE_JSON }}
+      pat-github: ${{ secrets.PAT_GITHUB }}
 
-    jobs:
-      quasar-build-android:
-        if: ${{inputs.build-android}} == 'true'
-        uses: JayTechNL/jaytech-tools-github-workflows/.github/workflows/quasar-android.yml@master
-        with:
-          app-id: nl.jaytech.app
-        secrets:
-          play-store-json: ${{ secrets.PLAY_STORE_JSON }}
-          pat-github: ${{ secrets.PAT_GITHUB }}
-     
-      quasar-web:
-        if: ${{inputs.build-web}} == 'true'
-        uses: JayTechNL/jaytech-tools-github-workflows/.github/workflows/quasar-web.yml@master
-        secrets:
-          pat-github: ${{ secrets.PAT_GITHUB }}
+  quasar-web:
+    if: ${{inputs.build-web}} == 'true'
+    uses: JayTechNL/jaytech-tools-github-workflows/.github/workflows/quasar-web.yml@master
+    secrets:
+      pat-github: ${{ secrets.PAT_GITHUB }}
