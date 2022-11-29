@@ -64,6 +64,7 @@ jobs:
       pat-github: ${{ secrets.pat-github }}
       
   create-release:
+    if: ${{ always() }}
     needs: ["quasar-build-android", "quasar-build-web"]
     runs-on: ubuntu-latest
     steps:
