@@ -71,7 +71,7 @@ jobs:
       - name: Download web contents      
         uses: actions/download-artifact@v1      
         with:
-          name: quasar-build-web
+          name: quasar-build-web.tar.gz
           path: ./output/web
       - name: release
         uses: actions/create-release@v1
