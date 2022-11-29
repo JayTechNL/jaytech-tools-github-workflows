@@ -80,8 +80,7 @@ jobs:
           draft: false
           prerelease: false
           release_name: 0.0.1
-          tag_name: 0.0.1
-          body_path: CHANGELOG.md
+          tag_name: 0.0.1          
         env:
           GITHUB_TOKEN: ${{ secrets.pat-github }}
       - name: Upload quasar-web to release
