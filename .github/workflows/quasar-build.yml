@@ -35,7 +35,7 @@ on:
         type: boolean
         description: Run Quasar build for web?
         required: false
-        default: false      
+        default: false
     secrets:
       pat-github:
         description: GitHub PAT
@@ -55,10 +55,10 @@ jobs:
       app-id: nl.jaytech.app
     secrets:
       play-store-json: ${{ secrets.PLAY_STORE_JSON }}
-      pat-github: ${{ secrets.PAT_GITHUB }}
+      pat-github: ${{ secrets.pat-github }}
 
   quasar-build-web:
     if: ${{inputs.build-web}}
     uses: JayTechNL/jaytech-tools-github-workflows/.github/workflows/quasar-web.yml@master
     secrets:
-      pat-github: ${{ secrets.PAT_GITHUB }}
+      pat-github: ${{ secrets.pat-github }}
