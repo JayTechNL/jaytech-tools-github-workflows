@@ -62,3 +62,14 @@ jobs:
     uses: JayTechNL/jaytech-tools-github-workflows/.github/workflows/quasar-web.yml@master
     secrets:
       pat-github: ${{ secrets.pat-github }}
+      
+  create-release:
+    needs: ["quasar-build-android", "quasar-build-web"]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download web contents      
+        uses: actions/download-artifact@v1      
+        with:
+          name: quasar-build-web
+          path: ./output/web
+    
