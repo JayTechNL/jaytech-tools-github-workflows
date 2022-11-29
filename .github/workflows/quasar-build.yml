@@ -49,7 +49,7 @@ on:
 
 jobs:
   quasar-build-android:
-    if: ${{inputs.build-android}} == 'true'
+    if: ${{inputs.build-android}}
     uses: JayTechNL/jaytech-tools-github-workflows/.github/workflows/quasar-android.yml@master
     with:
       app-id: nl.jaytech.app
@@ -58,7 +58,7 @@ jobs:
       pat-github: ${{ secrets.PAT_GITHUB }}
 
   quasar-web:
-    if: ${{inputs.build-web}} == 'true'
+    if: ${{inputs.build-web}}
     uses: JayTechNL/jaytech-tools-github-workflows/.github/workflows/quasar-web.yml@master
     secrets:
       pat-github: ${{ secrets.PAT_GITHUB }}
