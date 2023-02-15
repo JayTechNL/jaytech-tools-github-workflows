@@ -45,6 +45,7 @@ jobs:
           repository: ${{inputs.repository}}
           token: ${{ secrets.pat-github }}
           path: workflow/repository
+          fetch-depth: 0
       - name: Checkout JayTech actions
         uses: actions/checkout@v3
         with:
