@@ -1,0 +1,136 @@
+on:
+  workflow_call:
+    inputs:
+      application-name:
+        type: string
+        description: The application name (repository name without api/contract/ui)
+        required: true
+      environment-name:
+        type: string
+        description: The keyword used to define your environment repository
+        required: false
+        default: gitops
+      repository:
+        description: Repository name; format = [organization]/[repository-name]
+        required: true
+        type: string
+      solution-location:
+        description: Additional folders to get to solution file location
+        required: false
+        default: Source/
+        type: string
+      replacements-in:
+        type: string
+        description: Replacement placeholders separated by a semicolon (;)
+        required: false
+        default: ""
+    secrets:
+      aws-region:
+        description: The region in AWS to push to
+        required: true
+      aws-access-key-id:
+        description: The AWS Access Key ID
+        required: true
+      aws-secret-access-key:
+        description: The AWS Secret Access Key
+        required: true
+      pat-github:
+        description: GitHub PAT
+        required: true
+      replacements-out:
+        description: Replacement values separated by a semicolon (;)
+        required: false
+jobs:
+  preparations:
+    name: Preparations
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          repository: ${{inputs.repository}}
+          token: ${{ secrets.pat-github }}
+          path: workflow/repository
+      - name: Checkout JayTech actions
+        uses: actions/checkout@v3
+        with:
+          ref: master
+          repository: JayTechNL/jaytech-tools-github-actions
+          token: ${{ secrets.pat-github }}
+          path: workflow/actions
+      - name: Replace placeholders
+        uses: ./workflow/actions/replace-placeholders
+        with:
+          replacements-in: ${{inputs.replacements-in}}
+          replacements-out: ${{secrets.replacements-out}}
+      - name: Upload prepared repository
+        uses: actions/upload-artifact@v3
+        with:
+          name: workflow
+          path: workflow
+  build:
+    needs: preparations
+    name: Build .NET
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download prepared repository
+        uses: actions/download-artifact@v3
+        with:
+          name: workflow
+          path: workflow
+      - name: .NET Build
+        uses: ./workflow/actions/dotnet-build
+        with:
+          solution-path: ${{inputs.solution-location}}
+  test:
+    name: Test .NET
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download prepared repository
+        uses: actions/download-artifact@v3
+        with:
+          name: workflow
+          path: workflow
+      - name: .NET Test
+        uses: ./workflow/actions/dotnet-test
+        with:
+          solution-path: ${{inputs.solution-location}}
+  test-optional:
+    name: Test .NET (optional)
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download prepared repository
+        uses: actions/download-artifact@v3
+        with:
+          name: workflow
+          path: workflow
+      - name: Stryker Solution
+        uses: ./workflow/actions/stryker-solution
+        with:
+          projects: JayTech.Services.JayTech.Api
+          test-project: JayTech.Services.JayTech.Tests.Unit
+  continuous-integration:
+    name: Continuous Integration
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download prepared repository
+        uses: actions/download-artifact@v3
+        with:
+          name: workflow
+          path: workflow
+      - name: Determine Version
+        uses: ./workflow/actions/gitversion-semver
+        with:
+          prerelease: true
+      # - name: jta-nuget-push-azure
+      #   uses: ./wd/actions/jta-nuget-push-azure
+      #   with:
+      #     software-version: ${{env.SOFTWARE_VERSION}}
+      #     dotnet-version: ${{env.DOTNET_VERSION}}
+      #     project-folder: workflow-repo/Source
+      #     azure-api-key: ${{env.AZURE_API_KEY}}
+      #     azure-source: ${{env.AZURE_SOURCE}}
+      #     azure-feed: ${{env.AZURE_FEED}}
