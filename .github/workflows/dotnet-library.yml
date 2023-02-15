@@ -75,7 +75,7 @@ jobs:
         with:
           targetPath: "./workflow/repository"
           useConfigFile: true
-          configFilePath: "./workflow/repository/GitVersion.yml"
+          configFilePath: "./workflow/repository/GitVersion.yaml"
       - name: Display GitVersion outputs
         shell: bash
         run: |
