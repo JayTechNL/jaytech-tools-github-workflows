@@ -68,6 +68,7 @@ jobs:
         uses: ./workflow/actions/gitversion-semver
       - name: Grote echo
         run: echo "${{ steps.semver.outputs.semver }}"
+        shell: bash
   build:
     needs: preparations
     name: Build .NET
