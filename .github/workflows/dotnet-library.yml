@@ -64,9 +64,10 @@ jobs:
           name: workflow
           path: workflow
       - name: Determine Version
+        id: semver
         uses: ./workflow/actions/gitversion-semver
-        with:
-          prerelease: true
+      - name: Grote echo
+        run: echo "${{ steps.semver.outputs.semantic-version }}"
   build:
     needs: preparations
     name: Build .NET
