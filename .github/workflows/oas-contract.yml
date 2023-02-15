@@ -1,10 +1,6 @@
 on:
   workflow_call:
     inputs:
-      contract-version:
-        type: string
-        description: The version of the contract to use for NuGet
-        required: true
       package-name:
         type: string
         description: The name of the package for NuGet
@@ -65,14 +61,16 @@ jobs:
         with:
           name: workflow
           path: workflow
+      - id: semver
+        uses: ./workflow/actions/gitversion-semver
       - name: Set contract version
-        run: sed -i "s/{{OAS_VERSION}}/${{inputs.contract-version}}/g" ./workflow/repository/${{inputs.oas-location}}
+        run: sed -i "s/{{OAS_VERSION}}/${{ steps.semver.outputs.semantic-version }}/g" ./workflow/repository/${{inputs.oas-location}}
       - name: Build OAS Contract
         uses: ./workflow/actions/dotnet-build-contract
         with:
           file-path: ${{inputs.oas-location}}
           package-name: ${{inputs.package-name}}
-          package-version: ${{inputs.contract-version}}
+          package-version: ${{ steps.semver.outputs.semantic-version }}
       - uses: actions/upload-artifact@v3
         with:
           name: contract-package
@@ -95,9 +93,19 @@ jobs:
       - name: nuget-push-azure
         uses: ./workflow/actions/nuget-push-azure
         with:
-          software-version: ${{inputs.contract-version}}
+          software-version: ${{ steps.semver.outputs.semantic-version }}
           dotnet-version: ${{inputs.dotnet-version}}
           project-folder: ./workflow/actions/nuget-push-azure/contract-package/
           azure-api-key: ${{secrets.azure-api-key}}
           azure-source: ${{secrets.azure-source}}
           azure-feed: ${{secrets.azure-feed}}
+      - name: Tag & Release
+        uses: actions/create-release@v1        
+        if: contains('refs/heads/master', github.ref)
+        with:
+          draft: false
+          prerelease: false
+          release_name: ${{ steps.semver.outputs.semantic-version }}
+          tag_name: ${{ steps.semver.outputs.semantic-version }}     
+        env:
+          GITHUB_TOKEN: ${{ secrets.pat-github }}
