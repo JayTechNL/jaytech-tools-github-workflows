@@ -13,7 +13,7 @@ on:
         type: string
         description: The version .NET to use for NuGet
         required: false
-        default: "6.x"
+        default: "7.x"
       oas-location:
         type: string
         description: The location to the OAS file
