@@ -91,6 +91,8 @@ jobs:
         with:
           name: contract-package
           path: ./workflow/actions/nuget-push-azure/contract-package
+      - id: semver
+        uses: ./workflow/actions/gitversion-semver
       - name: nuget-push-azure
         uses: ./workflow/actions/nuget-push-azure
         with:
