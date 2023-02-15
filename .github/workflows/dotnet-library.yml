@@ -119,7 +119,7 @@ jobs:
       - id: semver
         uses: ./workflow/actions/gitversion-semver
       - name: Push to Azure
-        uses: ./wd/actions/nuget-push-azure
+        uses: ./workflow/actions/nuget-push-azure
         with:
           software-version: ${{ steps.semver.outputs.semantic-version }}
           dotnet-version: ${{env.DOTNET_VERSION}}
