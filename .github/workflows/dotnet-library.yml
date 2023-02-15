@@ -72,6 +72,8 @@ jobs:
       - name: Determine Version
         id:   gitversion
         uses: gittools/actions/gitversion/execute@v0.9.7      
+        with:
+          targetPath: "./workflow/repository"  
       - name: Display GitVersion outputs
         shell: bash
         run: |
