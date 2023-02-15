@@ -62,12 +62,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: workflow
-          path: workflow
-      - id: semver
-        uses: ./workflow/actions/gitversion-semver
-      - name: Grote echo
-        run: echo ${{ steps.semver.outputs.semantic-version }}
-        shell: bash
+          path: workflow      
   build:
     needs: preparations
     name: Build .NET
@@ -120,13 +115,15 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: workflow
-          path: workflow      
-      # - name: jta-nuget-push-azure
-      #   uses: ./wd/actions/jta-nuget-push-azure
-      #   with:
-      #     software-version: ${{env.SOFTWARE_VERSION}}
-      #     dotnet-version: ${{env.DOTNET_VERSION}}
-      #     project-folder: workflow-repo/Source
-      #     azure-api-key: ${{env.AZURE_API_KEY}}
-      #     azure-source: ${{env.AZURE_SOURCE}}
-      #     azure-feed: ${{env.AZURE_FEED}}
+          path: workflow     
+      - id: semver
+        uses: ./workflow/actions/gitversion-semver
+      - name: jta-nuget-push-azure
+        uses: ./wd/actions/jta-nuget-push-azure
+        with:
+          software-version: ${{ steps.semver.outputs.semantic-version }}
+          dotnet-version: ${{env.DOTNET_VERSION}}
+          project-folder: workflow-repo/Source
+          azure-api-key: ${{env.AZURE_API_KEY}}
+          azure-source: ${{env.AZURE_SOURCE}}
+          azure-feed: ${{env.AZURE_FEED}}
