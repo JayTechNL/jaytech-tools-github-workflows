@@ -28,12 +28,6 @@ on:
       aws-region:
         description: The region in AWS to push to
         required: true
-      aws-access-key-id:
-        description: The AWS Access Key ID
-        required: true
-      aws-secret-access-key:
-        description: The AWS Secret Access Key
-        required: true
       pat-github:
         description: GitHub PAT
         required: true
