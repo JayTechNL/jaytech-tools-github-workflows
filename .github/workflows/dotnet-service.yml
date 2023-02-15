@@ -133,6 +133,18 @@ jobs:
           aws-access-key-id: ${{secrets.aws-access-key-id}}
           aws-secret-access-key: ${{secrets.aws-secret-access-key}}
           aws-region: ${{secrets.aws-region}}
+      - id: semver
+        uses: ./workflow/actions/gitversion-semver
+      - name: Tag & Release
+        uses: actions/create-release@v1        
+        if: contains('refs/heads/master', github.ref)
+        with:
+          draft: false
+          prerelease: false
+          release_name: ${{ steps.semver.outputs.semantic-version }}
+          tag_name: ${{ steps.semver.outputs.semantic-version }}     
+        env:
+          GITHUB_TOKEN: ${{ secrets.pat-github }}
   sync-gitops:
     name: Sync GitOps
     needs: continuous-delivery
