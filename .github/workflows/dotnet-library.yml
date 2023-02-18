@@ -41,13 +41,13 @@ on:
         required: false
       azure-api-key:
         description: The Azure API key
-        required: true
+        required: false
       azure-source:
         description: The Azure Artifacts Source
-        required: true
+        required: false
       azure-feed:
         description: The Azure Artifacts Feed
-        required: true
+        required: false
       nuget-api-key:
         description: The NuGet API key
         required: false
