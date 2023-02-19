@@ -24,11 +24,6 @@ on:
         description: Replacement placeholders separated by a semicolon (;)
         required: false
         default: ""
-      nuget:
-        type: boolean
-        description: Push to NuGet instead of Azure feed?
-        required: false
-        default: false
     secrets:
       aws-region:
         description: The region in AWS to push to
@@ -135,24 +130,16 @@ jobs:
           path: workflow     
       - id: semver
         uses: ./workflow/actions/gitversion-semver
-      - if: inputs.nuget == true
-        name: nuget-push
+      - name: nuget-push
         uses: ./workflow/actions/nuget-push
         with:
           software-version: ${{ steps.semver.outputs.semantic-version }}
           project-folder: workflow/repository/Source
           nuget-api-key: ${{secrets.nuget-api-key}}
-          folder-prefix: "Assemblies/"
-      - if: inputs.nuget == false
-        name: nuget-push-azure
-        uses: ./workflow/actions/nuget-push-azure
-        with:
-          software-version: ${{ steps.semver.outputs.semantic-version }}
-          project-folder: workflow/repository/Source
           azure-api-key: ${{secrets.azure-api-key}}
           azure-source: ${{secrets.azure-source}}
           azure-feed: ${{secrets.azure-feed}}
-          folder-prefix: "Assemblies/"
+          folder-prefix: "Assemblies/"      
       - name: Tag & Release
         uses: actions/create-release@v1        
         if: contains('refs/heads/master', github.ref)
