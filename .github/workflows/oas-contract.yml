@@ -90,15 +90,15 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: contract-package
-          path: ./workflow/actions/nuget-push-azure/contract-package
+          path: ./workflow/actions/nuget-push/contract-package
       - id: semver
         uses: ./workflow/actions/gitversion-semver
-      - name: nuget-push-azure
-        uses: ./workflow/actions/nuget-push-azure
+      - name: nuget-push
+        uses: ./workflow/actions/nuget-push
         with:
           software-version: ${{ steps.semver.outputs.semantic-version }}
           dotnet-version: ${{inputs.dotnet-version}}
-          project-folder: ./workflow/actions/nuget-push-azure/contract-package/
+          project-folder: ./workflow/actions/nuget-push/contract-package/
           azure-api-key: ${{secrets.azure-api-key}}
           azure-source: ${{secrets.azure-source}}
           azure-feed: ${{secrets.azure-feed}}
