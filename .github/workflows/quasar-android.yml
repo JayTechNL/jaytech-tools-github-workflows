@@ -55,6 +55,7 @@ jobs:
         with:
           name: workflow
           path: workflow
+          retention-days: 30
   build:
     needs: preparations
     name: Build Quasar Android
@@ -74,6 +75,7 @@ jobs:
         with:
           name: output
           path: ./workflow/repository/dist
+          retention-days: 30
   continuous-delivery:
     needs: build
     name: Continuous Delivery

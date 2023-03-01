@@ -74,7 +74,8 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: workflow
-          path: workflow      
+          path: workflow
+          retention-days: 30
   build:
     needs: preparations
     name: Build .NET
