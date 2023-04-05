@@ -24,6 +24,11 @@ on:
         description: Replacement placeholders separated by a semicolon (;)
         required: false
         default: ""
+      use-nuget:
+        type: boolean
+        description: Use NuGet instead of Azure Artifacts?
+        default: false
+        required: false
     secrets:
       aws-region:
         description: The region in AWS to push to
@@ -45,7 +50,7 @@ on:
         required: false
       nuget-api-key:
         description: The NuGet API key
-        required: false
+        required: false      
 jobs:
   preparations:
     name: Preparations
@@ -140,7 +145,8 @@ jobs:
           azure-api-key: ${{secrets.azure-api-key}}
           azure-source: ${{secrets.azure-source}}
           azure-feed: ${{secrets.azure-feed}}
-          folder-prefix: "Assemblies/"      
+          folder-prefix: "Assemblies/"
+          nuget: ${{inputs.use-nuget}}
       - name: Tag & Release
         uses: actions/create-release@v1        
         if: contains('refs/heads/master', github.ref)
