@@ -25,9 +25,9 @@ on:
         required: false
         default: ""
       use-nuget:
-        type: boolean
+        type: string
         description: Use NuGet instead of Azure Artifacts?
-        default: false
+        default: "false"
         required: false
     secrets:
       aws-region:
